@@ -15,10 +15,15 @@ import click
     default="v3.1.1",
     type=str,
     help="The version of Synthea to use",
-    show_default=True
+    show_default=True,
 )
 @click.option(
-    "-u", "--upload", default=True, type=bool, help="Upload data to a FHIR server", show_default=True
+    "-u",
+    "--upload",
+    default=True,
+    type=bool,
+    help="Upload data to a FHIR server",
+    show_default=True,
 )
 @click.option(
     "-fu",
@@ -26,19 +31,27 @@ import click
     default="http://localhost:8080",
     type=str,
     help="URL of the FHIR server that data is uploaded to",
-    show_default=True
+    show_default=True,
 )
-@click.option("-s", "--seed", default=1, type=int, help="Synthea seed", show_default=True)
+@click.option(
+    "-s", "--seed", default=1, type=int, help="Synthea seed", show_default=True
+)
 @click.option(
     "-p",
     "--populationSize",
     default=100,
     type=str,
     help="Synthea patient population size",
-    show_default=True
+    show_default=True,
 )
-@click.option("-cs", "--clinicianSeed", default=1, type=int, help="clinician seed", show_default=True)
-
+@click.option(
+    "-cs",
+    "--clinicianSeed",
+    default=1,
+    type=int,
+    help="clinician seed",
+    show_default=True,
+)
 def generate_and_load_synthea_data(
     syntheaversion: str,
     upload: bool,
@@ -73,7 +86,14 @@ def generate_and_load_synthea_data(
 
     # Create Synthea data
     synthea_args = ["java", "-jar", "synthea-with-dependencies.jar"]
-    synthea_command_arguments = ["-p", str(populationsize), "-s", str(seed), '-cs', str(clinicianseed)]
+    synthea_command_arguments = [
+        "-p",
+        str(populationsize),
+        "-s",
+        str(seed),
+        "-cs",
+        str(clinicianseed),
+    ]
     synthea_args.extend(synthea_command_arguments)
     print(synthea_args)
     dataset_directory = (

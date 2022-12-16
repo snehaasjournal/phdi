@@ -33,7 +33,7 @@ def jsonify(
     printoutput: bool,
 ):
     """
-    Jsonify File is a simple CLI utility to produced a jsonified version of the contents
+    Jsonify File is a simple CLI utility to produce a jsonified version of the contents
     of a text file.
     """
 

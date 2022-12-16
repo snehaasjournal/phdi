@@ -52,6 +52,13 @@ import click
     help="clinician seed",
     show_default=True,
 )
+@click.option(
+    "--generate_only_alive_patients",
+    default="true",
+    type=str,
+    help="Only generate patients that are alive.",
+    show_default=True,
+)
 def generate_and_load_synthea_data(
     syntheaversion: str,
     upload: bool,
@@ -59,6 +66,7 @@ def generate_and_load_synthea_data(
     seed: int,
     populationsize: int,
     clinicianseed: int,
+    generate_only_alive_patients: str,
 ):
     """
     Generate and Load Synthea is a simple CLI utility for generating synthetic FHIR data
@@ -93,6 +101,7 @@ def generate_and_load_synthea_data(
         str(seed),
         "-cs",
         str(clinicianseed),
+        f"--generate.only_alive_patients={generate_only_alive_patients}"
     ]
     synthea_args.extend(synthea_command_arguments)
     print(synthea_args)

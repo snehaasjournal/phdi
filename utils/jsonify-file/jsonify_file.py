@@ -27,14 +27,13 @@ import click
     default=False,
     show_default=True,
 )
-
 def jsonify(
     inputfile: str,
     outputpath: str,
     printoutput: bool,
 ):
     """
-    Jsonify File is a simple CLI utility to produced a jsonified version of the contents 
+    Jsonify File is a simple CLI utility to produced a jsonified version of the contents
     of a text file.
     """
 
@@ -48,7 +47,7 @@ def jsonify(
     # Write jsonified to file
     if outputpath != "":
         output_path = Path(outputpath)
-        output_path= output_path/f"jsonified_{input_file.name}"
+        output_path = output_path / f"jsonified_{input_file.name}"
         output_file = open(output_path, "w")
         output_file.write(jsonified_text)
         output_file.close()
@@ -58,7 +57,5 @@ def jsonify(
         print(jsonified_text)
 
 
-
 if __name__ == "__main__":
     jsonify()
-

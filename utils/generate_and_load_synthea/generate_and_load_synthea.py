@@ -108,12 +108,12 @@ def generate_and_load_synthea_data(
     """
     Generate and Load Synthea is a simple CLI utility for generating synthetic FHIR data
     with Synthea, and uploading it to a FHIR sever. The Synthea version and
-    seed values are controlled to ensure FHIR dataset reproducibility. These datasets
-    are stored in the HOME/synthea/ directory. If a specific dataset is requested that 
-    already exists it will not be recreated, instead the existing data will be used.
-    If you do not already have a FHIR server running Generate and Load Synthea supports 
-    spinning up an instance of the HAPI FHIR server on localhost with Docker 
-    (see options below).  
+    seed values are controlled to ensure FHIR dataset reproducibility. Datasets
+    generated with this tool are stored locally in the HOME/synthea/ directory. If a
+    specific dataset is requested that already exists it will not be recreated, instead
+    the existing data will be used. If you do not already have a FHIR server running,
+    Generate and Load Synthea supports spinning up an instance of the HAPI FHIR server
+    on localhost with Docker (see options below).  
 
     """
 

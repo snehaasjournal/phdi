@@ -113,7 +113,7 @@ def generate_and_load_synthea_data(
     specific dataset is requested that already exists it will not be recreated, instead
     the existing data will be used. If you do not already have a FHIR server running,
     Generate and Load Synthea supports spinning up an instance of the HAPI FHIR server
-    on localhost with Docker (see options below).  
+    on localhost with Docker (see options below).
 
     """
 
@@ -128,7 +128,7 @@ def generate_and_load_synthea_data(
     synthea_directory = synthea_directory / synthea_version
     if not (synthea_directory / "synthea-with-dependencies.jar").is_file():
         print("Downloading synthea-with-dependencies.jar to...")
-        synthea_url = f"https://github.com/synthetichealth/synthea/releases/download/{syntheaversion}/synthea-with-dependencies.jar"
+        synthea_url = f"https://github.com/synthetichealth/synthea/releases/download/{synthea_version}/synthea-with-dependencies.jar"
         synthea_jar_response = requests.get(synthea_url, stream=True)
         with open(synthea_directory / "synthea-with-dependencies.jar", "wb") as file:
             for chunk in synthea_jar_response.iter_content(chunk_size=1024):
@@ -182,8 +182,8 @@ def generate_and_load_synthea_data(
             sleep(1)
             hapi_server.reload()
             continue
-        
-        # Poll the /fhir/metdata endpoint untill a 200 is returned to determine that 
+
+        # Poll the /fhir/metdata endpoint untill a 200 is returned to determine that
         # the server is up and running.
         polling2.poll(
             lambda: requests.get(fhir_url + "/fhir/metadata").status_code == 200,
@@ -207,7 +207,7 @@ def generate_and_load_synthea_data(
             print(f"Evaluating {fhir_filepath}")
 
             if os.path.isfile(fhir_filepath) and fhir_filepath.endswith(".json"):
-                with open(fhir_filepath) as fhir_file:
+                with open(fhir_filepath, encoding="utf-8") as fhir_file:
                     print(f"Importing {fhir_filepath}")
                     phdi.fhir.transport.http.http_request_with_reauth(
                         cred_manager=None,

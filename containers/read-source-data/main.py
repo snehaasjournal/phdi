@@ -3,7 +3,6 @@ import json
 import logging
 import requests
 from time import sleep
-from typing import List
 from datetime import datetime
 from azure.core.exceptions import ResourceNotFoundError
 from azure.mgmt.datafactory import DataFactoryManagementClient
@@ -38,7 +37,7 @@ class ReadSourceDataInput(BaseModel):
     Input parameters for ReadSourceData.
     """
 
-    event: List[dict] = Field(description="The event that triggered this function.")
+    event: list[dict] = Field(description="The event that triggered this function.")
 
 
 class ReportabilityResponseInput(BaseModel):

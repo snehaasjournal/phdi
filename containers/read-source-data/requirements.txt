@@ -1,0 +1,7 @@
+azure-identity
+azure-mgmt-datafactory
+azure-storage-blob
+fastapi
+uvicorn
+httpx
+phdi

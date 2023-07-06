@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # labels:
+  #   app: phdi
+  name: fhir-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phdi
+      # run: phdi
+  template:
+    metadata:
+      labels:
+        app: phdi
+        # run: phdi
+    spec:
+      containers:
+        - name: fhir-converter
+          image: ghcr.io/cdcgov/phdi/fhir-converter:v1.0.7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: fhir-converter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: phdi
+  name: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phdi
+  template:
+    metadata:
+      labels:
+        app: phdi
+    spec:
+      containers:
+        - name: ingestion
+          image: ghcr.io/cdcgov/phdi/ingestion:v1.0.7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: ingestion
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-load-balancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: fhir-converter
+      port: 80
+      targetPort: 8080
+    - name: ingestion
+      port: 81
+      targetPort: 8080
+    # - name: tabulation
+    #   port: 8082
+    #   targetPort: 8082
+    # - name: alerts
+    #   port: 8083
+    #   targetPort: 8083
+    # - name: validation
+    #   port: 8084
+    #   targetPort: 8084
+    # - name: message-parser
+    #   port: 8085
+    #   targetPort: 8085
+    # - name: record-linkage
+    #   port: 8086
+    #   targetPort: 8086
+    # - name: kafka-to-delta
+    #   port: 8087
+    #   targetPort: 8087
+    # - name: read-source
+    #   port: 8088
+    #   targetPort: 8088
+  selector:
+    app: phdi

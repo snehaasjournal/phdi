@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-test-app  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingress-test-app
+  template:
+    metadata:
+      labels:
+        app: ingress-test-app
+    spec:
+      containers:
+      - name: ingress-test-app
+        image: ghcr.io/cdcgov/phdi/fhir-converter:v1.0.7
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "Welcome to Azure Kubernetes Service (AKS)"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-test-app  
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: ingress-test-app

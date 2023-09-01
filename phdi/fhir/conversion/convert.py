@@ -51,6 +51,8 @@ def add_rr_data_to_eicr(rr, ecr):
     print(type(rr))
     print(type(ecr))
 
+    raise Exception("Could not convert RR: " + type(rr))
+
     rr = etree.fromstring(rr)
     ecr = etree.fromstring(ecr)
 

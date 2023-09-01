@@ -45,6 +45,12 @@ def add_rr_data_to_eicr(rr, ecr):
         )
         ecr = "\n".join(lines)
 
+    print("Debugging conversion:")
+    print(rr)
+    print(ecr)
+    print(type(rr))
+    print(type(ecr))
+
     rr = etree.fromstring(rr)
     ecr = etree.fromstring(ecr)
 

@@ -87,6 +87,7 @@ async def process_message_endpoint_ws(
 
         processing_config = load_processing_config("sample-orchestration-config.json")
         await call_apis(config=processing_config, input=input, websocket=websocket)
+        websocket.close()
 
 
 @app.post("/process", status_code=200, responses=process_message_response_examples)

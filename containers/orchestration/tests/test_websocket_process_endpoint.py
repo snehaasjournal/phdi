@@ -2,20 +2,26 @@ from phdi.containers.base_service import BaseService
 from fastapi.testclient import TestClient
 from app.config import get_settings
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock, AsyncMock
 import pytest
+from fastapi.websockets import WebSocketDisconnect
 from icecream import ic
-
-app = BaseService(
-    service_name="PHDI Orchestration",
-    description_path=Path(__file__).parent.parent / "description.md",
-).start()
+from app.main import app
+from unittest import mock
+import asyncio
 
 get_settings()
 
 
+@pytest.fixture()
+def mock_sum(mocker):
+    async_mock = AsyncMock()
+    mocker.patch('app.services.call_apis', side_effect=async_mock)
+    return async_mock
+
+
 @pytest.mark.asyncio
-async def test_websocket_process_message_endpoint():
+async def test_websocket_process_message_endpoint(mock_sum):
     client = TestClient(app)
     with open(
             Path(__file__).parent.parent.parent.parent
@@ -25,15 +31,16 @@ async def test_websocket_process_message_endpoint():
             / "test_zip.zip",
             "rb",
     ) as file:
-        test_zip = file
-        ic(test_zip)
-    with patch("app.services.call_apis") as mock_call_apis:
-        with client.websocket_connect("/process-ws") as websocket:
+        test_zip = file.read()
 
+    mock_sum.return_value = 'wat'
+    with client.websocket_connect("/process-ws") as websocket:
+        try:
             await websocket.send_bytes(test_zip)
+        except WebSocketDisconnect:
+            pass
 
-    mock_call_apis.assert_called_with()
-
+    mock_sum.assert_called_with("true")
 
 
 # @pytest.mark.asyncio

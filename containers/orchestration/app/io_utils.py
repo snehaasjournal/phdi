@@ -6,6 +6,10 @@ from pathlib import Path
 from typing import Dict
 from zipfile import ZipFile
 import io
+import os
+import logging
+from app.data_storage.fhir_storage import FHIRStorage
+from app.data_storage.postgres_local import PostgresLocalFhirStorage
 
 
 @cache
@@ -89,3 +93,14 @@ def load_config_assets(upload_config_response_examples, PutConfigResponse) -> Di
         upload_config_response_examples[status_code] = read_json_from_assets(file_name)
         # upload_config_response_examples[status_code]["model"] = PutConfigResponse
     return upload_config_response_examples
+
+
+def load_data_storage() -> FHIRStorage or None:
+    storage_type = os.environ.get("STORAGE_TYPE")
+    print(storage_type)
+    if storage_type == "POSTGRES":
+        fhir_storage = PostgresLocalFhirStorage()
+        return fhir_storage
+    else:
+        logging.info("No data store initialized.")
+        return None

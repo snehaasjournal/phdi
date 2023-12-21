@@ -11,6 +11,8 @@ python-dotenv
 python-multipart
 pytest-env
 pytest-asyncio
+psycopg2-binary==2.9.7
+sqlalchemy
 testcontainers[compose]
 websockets
 asyncio

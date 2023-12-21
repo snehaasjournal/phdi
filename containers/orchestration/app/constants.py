@@ -1,4 +1,4 @@
-from app.utils import read_json_from_assets
+from app.io_utils import read_json_from_assets
 from typing import Literal
 
 

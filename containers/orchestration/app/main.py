@@ -12,11 +12,12 @@ from fastapi import (
 )
 from typing import Annotated
 from pathlib import Path
-from app.utils import (
+from app.io_utils import (
     load_processing_config,
     unzip_ws,
     unzip_http,
     load_config_assets,
+    load_data_storage,
 )
 from app.config import get_settings
 from app.services import call_apis
@@ -50,6 +51,9 @@ app = BaseService(
 upload_config_response = load_config_assets(
     upload_config_response_examples, PutConfigResponse
 )
+
+data_storage = load_data_storage()
+print(data_storage)
 
 
 class WS_File:

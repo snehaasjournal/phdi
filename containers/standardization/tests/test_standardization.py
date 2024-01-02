@@ -13,17 +13,19 @@ from app.utils import (
     standardize_phones_in_bundle,
     _standardize_phones_in_resource,
     _extract_countries_from_resource,
-    read_json_from_assets,
     _standardize_date,
     _validate_date,
+    apply_function_to_fhirpath
 )
 
 client = TestClient(app)
 
+def read_json_from_assets(filename: str):
+    return json.load(open((pathlib.Path(__file__).parent / "assets" / filename)))
 
 @pytest.fixture
 def single_patient_bundle():
-    return read_json_from_assets("single_patient_bundle.json")
+    return read_json_from_assets("test_patient_bundle.json")
 
 
 def test_health_check():
@@ -225,3 +227,12 @@ def test_extract_countries_from_resource():
     assert [
         country for country in _extract_countries_from_resource(patient, "numeric")
     ] == ["840"] * 3
+
+
+def test_function_to_fhirpath(single_patient_bundle):
+    
+    print(single_patient_bundle)
+    result = apply_function_to_fhirpath(single_patient_bundle, "Bundle.entry.resource.where(resourceType = 'Patient').name.first().family", standardize_name)
+    print(result)
+    
+    assert result['entry'][1]['resource']['name'][0]['family'] == 'DOE'

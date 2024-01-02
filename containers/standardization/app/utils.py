@@ -15,9 +15,6 @@ FHIR_DATE_FORMAT = "%Y-%m-%d"
 FHIR_DATE_DELIM = "-"
 
 
-def read_json_from_assets(filename: str):
-    return json.load(open((pathlib.Path(__file__).parent.parent / "assets" / filename)))
-
 
 def is_fhir_bundle(bundle) -> bool:
     """
@@ -66,10 +63,9 @@ def apply_function_to_fhirpath(bundle: Dict, fhirpath: str, function: Callable) 
 
     elements = fhirpath_evaluate(bundle, fhirpath)
 
-    for element in elements:
+    for index, element in enumerate(elements):
         # apply the function to each element
-        function(element)
-
+        elements[index] = function(element)
     return bundle
 
 

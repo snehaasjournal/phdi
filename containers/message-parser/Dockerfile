@@ -7,12 +7,10 @@ RUN apt-get update && apt-get install -y \
   curl \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/astral-sh/uv/releases/download/0.1.12/uv-installer.sh | sh
-
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 COPY ./requirements.txt /code/requirements.txt
-
 RUN uv pip install --python python3.10 --no-cache -r requirements.txt
 
 COPY ./app /code/app

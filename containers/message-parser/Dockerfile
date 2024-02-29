@@ -1,25 +1,23 @@
-FROM python:3.10-slim
+FROM python:3.10-slim AS python-base
 
 WORKDIR /code
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install -y git curl
+RUN apt-get update && apt-get install -y \
+  git \
+  curl \
+  && rm -rf /var/lib/apt/lists/*
 
-ENV VIRTUAL_ENV=/opt/venv \
-  PATH="/opt/venv/bin:$PATH"
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/astral-sh/uv/releases/download/0.1.12/uv-installer.sh | sh
 
-ADD https://astral.sh/uv/install.sh /install.sh
-RUN chmod -R 655 /install.sh && /install.sh && rm /install.sh
+ENV PATH="/root/.cargo/bin:${PATH}"
+
 COPY ./requirements.txt /code/requirements.txt
-RUN /root/.cargo/bin/uv venv /opt/venv && \
-  /root/.cargo/bin/uv pip install --no-cache -r requirements.txt
+
+RUN uv pip install --python python3.10 --no-cache -r requirements.txt
 
 COPY ./app /code/app
 COPY ./assets /code/assets
 COPY ./description.md /code/description.md
-
-ENV PATH="/opt/venv/bin:$PATH"
 
 EXPOSE 8080
 CMD uvicorn app.main:app --host 0.0.0.0 --port 8080

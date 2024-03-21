@@ -242,7 +242,7 @@ async def use_case_query(input: UseCaseQueryRequest):
 
     # TODO: Replace everything after "request" with TEFCA message parser output
     return templates.TemplateResponse(
-        "templates/patient-info.html",
+        "patient-info.html",
         {
             "request": use_case_response,
             "parsed_values": {

@@ -4,6 +4,23 @@
     "@typescript-eslint",
     "unused-imports"
   ],
+  "overrides": [
+    {
+      "files": [
+        "*.test.*"
+      ],
+      "plugins": [
+        "jest"
+      ],
+      "extends": [
+        "plugin:jest/recommended"
+      ],
+      "rules": {
+        "jest/no-identical-title": "off",
+        "jest/valid-title": "off"
+      }
+    }
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
@@ -46,7 +63,10 @@
     "temp-rules": [
       "off"
     ],
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "no-useless-escape": "off",
     "no-prototype-builtins": "off",
     "@typescript-eslint/restrict-template-expressions": [

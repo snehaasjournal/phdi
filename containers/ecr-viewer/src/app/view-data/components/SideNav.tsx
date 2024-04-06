@@ -102,19 +102,19 @@ const SideNav: React.FC = () => {
         };
       },
     );
-    let sortedHeadings: SectionConfig[] = sortHeadings(headings);
+    const sortedHeadings: SectionConfig[] = sortHeadings(headings);
     setSectionConfigs(sortedHeadings);
 
-    let options = {
+    const options = {
       root: null,
       rootMargin: "0px 0px -80% 0px",
       threshold: 0.8,
     };
 
-    let observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          let id =
+          const id =
             entry.target.id || entry.target.querySelectorAll("span")[0]?.id;
           setActiveSection(id);
         }
@@ -124,9 +124,9 @@ const SideNav: React.FC = () => {
   }, []);
 
   function buildSideNav(sectionConfigs: SectionConfig[]) {
-    let sideNavItems: React.ReactNode[] = [];
-    for (let section of sectionConfigs) {
-      let sideNavItem = (
+    const sideNavItems: React.ReactNode[] = [];
+    for (const section of sectionConfigs) {
+      const sideNavItem = (
         <a
           key={section.id}
           href={"#" + section.id}
@@ -138,7 +138,7 @@ const SideNav: React.FC = () => {
       sideNavItems.push(sideNavItem);
 
       if (section.subNavItems) {
-        let subSideNavItems = buildSideNav(section.subNavItems);
+        const subSideNavItems = buildSideNav(section.subNavItems);
         sideNavItems.push(
           <UswdsSideNav isSubnav={true} items={subSideNavItems} />,
         );
@@ -148,7 +148,7 @@ const SideNav: React.FC = () => {
     return sideNavItems;
   }
 
-  let sideNavItems = buildSideNav(sectionConfigs);
+  const sideNavItems = buildSideNav(sectionConfigs);
 
   return <UswdsSideNav items={sideNavItems} />;
 };

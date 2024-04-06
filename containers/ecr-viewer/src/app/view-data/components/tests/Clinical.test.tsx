@@ -4,7 +4,8 @@ import { axe } from "jest-axe";
 import ClinicalInfo from "../ClinicalInfo";
 import { loadYamlConfig } from "@/app/api/utils";
 import { returnProceduresTable, evaluateClinicalData } from "@/app/utils";
-import { Procedure } from "fhir/r4";
+import { Bundle, Procedure } from "fhir/r4";
+import fhirBundleClinicalInfo from "../../../tests/assets/BundleClinicalInfo.json";
 
 describe("Snapshot test for Vital Signs/Encounter (Clinical Info section)", () => {
   let container: HTMLElement;
@@ -144,7 +145,7 @@ describe("Snapshot test for Clinical Notes", () => {
         ),
       },
     ];
-    let { container } = render(
+    const { container } = render(
       <ClinicalInfo
         clinicalNotes={clinicalNotes}
         activeProblemsDetails={[]}
@@ -183,7 +184,7 @@ describe("Snapshot test for Clinical Notes", () => {
         ),
       },
     ];
-    let { container } = render(
+    const { container } = render(
       <ClinicalInfo
         clinicalNotes={clinicalNotes}
         activeProblemsDetails={[]}
@@ -199,10 +200,9 @@ describe("Snapshot test for Clinical Notes", () => {
 });
 
 describe("Check that Clinical Info components render given FHIR bundle", () => {
-  const fhirBundleClinicalInfo = require("../../../tests/assets/BundleClinicalInfo.json");
   const mappings = loadYamlConfig();
   const testClinicalData = evaluateClinicalData(
-    fhirBundleClinicalInfo,
+    fhirBundleClinicalInfo as unknown as Bundle,
     mappings,
   );
 

@@ -127,7 +127,7 @@ export const checkAbnormalTag = (
  * @example searchKey - Ex. "Analysis Time" or the field that we are searching data for.
  */
 export function searchResultRecord(result: any[], searchKey: string) {
-  let resultsArray: any[] = [];
+  const resultsArray: any[] = [];
 
   // Loop through each table
   for (const table of result) {

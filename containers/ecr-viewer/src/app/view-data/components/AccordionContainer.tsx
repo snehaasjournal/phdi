@@ -133,7 +133,7 @@ const AccordianContainer: React.FC<AccordionContainerProps> = ({
 
   //Add id, adjust title
   accordionItems.forEach((item, index) => {
-    let formattedTitle = formatString(item["title"]);
+    const formattedTitle = formatString(item["title"]);
     item["id"] = `${formattedTitle}_${index + 1}`;
     item["title"] = <span id={formattedTitle}>{item["title"]}</span>;
     accordionItems[index] = item;

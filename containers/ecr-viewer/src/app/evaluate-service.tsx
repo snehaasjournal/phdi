@@ -23,7 +23,7 @@ export const evaluateTable = (
   fixed: boolean = true,
   outerBorder: boolean = true,
 ): React.JSX.Element => {
-  let headers = columns.map((column, index) => (
+  const headers = columns.map((column, index) => (
     <th
       key={`${column.columnName}${index}`}
       scope="col"
@@ -33,8 +33,8 @@ export const evaluateTable = (
     </th>
   ));
 
-  let tableRows = resources.map((entry, index) => {
-    let rowCells = columns.map((column, index) => {
+  const tableRows = resources.map((entry, index) => {
+    const rowCells = columns.map((column, index) => {
       let rowCellData: any;
       if (column?.value) {
         rowCellData = column.value;
@@ -101,7 +101,7 @@ export const evaluateReference = (
  * @returns {string} - The evaluated value as a string.
  */
 export const evaluateValue = (entry: FhirResource, path: string): string => {
-  let originalValue = evaluate(entry, path, undefined, fhirpath_r4_model)[0];
+  const originalValue = evaluate(entry, path, undefined, fhirpath_r4_model)[0];
   let value = "";
   if (typeof originalValue === "string" || typeof originalValue === "number") {
     value = originalValue.toString();

@@ -4,7 +4,7 @@ interface Metadata {
 
 interface TableRow {
   [key: string]: {
-    value: {};
+    value: NonNullable<unknown>;
     metadata: Metadata;
   };
 }
@@ -24,7 +24,7 @@ export const formatAddress = (
   zipCode: string,
   country: string,
 ) => {
-  let address = {
+  const address = {
     streetAddress: streetAddress || [],
     cityState: [city, state],
     zipCodeCountry: [zipCode, country],

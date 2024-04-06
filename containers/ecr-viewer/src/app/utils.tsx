@@ -388,10 +388,10 @@ export const evaluateEcrMetadata = (
 ) => {
   const rrDetails = evaluate(fhirBundle, mappings.rrDetails);
 
-  let reportableConditionsList: ReportableConditions = {};
+  const reportableConditionsList: ReportableConditions = {};
 
   for (const condition of rrDetails) {
-    let name = condition.valueCodeableConcept.coding[0].display;
+    const name = condition.valueCodeableConcept.coding[0].display;
     const triggers = condition.extension
       .filter(
         (x: { url: string; valueString: string }) =>
@@ -403,7 +403,7 @@ export const evaluateEcrMetadata = (
       reportableConditionsList[name] = {};
     }
 
-    for (let i in triggers) {
+    for (const i in triggers) {
       if (!reportableConditionsList[name][triggers[i]]) {
         reportableConditionsList[name][triggers[i]] = new Set();
       }
@@ -650,8 +650,8 @@ export const evaluateClinicalData = (
  * @returns {CompleteData} - An object containing arrays of available and unavailable display data items.
  */
 export const evaluateData = (data: DisplayData[]): CompleteData => {
-  let availableData: DisplayData[] = [];
-  let unavailableData: DisplayData[] = [];
+  const availableData: DisplayData[] = [];
+  const unavailableData: DisplayData[] = [];
   data.forEach((item) => {
     if (!item.value || (Array.isArray(item.value) && item.value.length === 0)) {
       unavailableData.push(item);

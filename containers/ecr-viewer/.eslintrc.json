@@ -2,7 +2,8 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-    "unused-imports"
+    "unused-imports",
+    "jsx-a11y"
   ],
   "overrides": [
     {
@@ -25,6 +26,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@next/next/recommended",
+    "plugin:jsx-a11y/recommended",
     "prettier"
   ],
   "env": {

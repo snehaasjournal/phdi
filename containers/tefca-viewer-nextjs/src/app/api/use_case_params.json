@@ -1,0 +1,26 @@
+{
+    "syphilis": {
+        "loinc_codes": ["LP70657-9", "98212-4"],
+        "snomed_codes": ["76272004"],
+        "resources":["Observation","DiagnosticReport","Condition","Encounter"]
+    },
+    "newborn-screening":{
+        "loinc_codes":["73700-7",
+        "73698-3",
+        "54108-6",
+        "54109-4",
+        "58232-0",
+        "57700-7",
+        "73739-5",
+        "73742-9",
+        "2708-6",
+        "8336-0"],
+        "snomed_codes":[],
+        "resources":["Observation"]
+    },
+    "social-determinants":{
+        "loinc_codes":[],
+        "snomed_codes":[],
+        "resources":["Observation"]
+    }
+}

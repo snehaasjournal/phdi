@@ -34,6 +34,7 @@ const FHIR_SERVERS: {
       "X-DESTINATION": "CernerHelios",
       "X-POU": "TREATMENT",
       "X-Request-Id": uuidv4(),
+      // Connection: "keep-alive",
       prefer: "return=representation",
       "Cache-Control": "no-cache",
       OAUTHSCOPES:

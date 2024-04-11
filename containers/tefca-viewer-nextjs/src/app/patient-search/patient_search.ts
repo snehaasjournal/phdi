@@ -21,6 +21,7 @@ const FHIR_SERVERS: {
   };
 } = {
   // https://gw.interop.community/skylightsandbox/open/
+  // https://gw.interop.community/HeliosConnectathonSa/open/
   meld: { hostname: "https://gw.interop.community/HeliosConnectathonSa/open/" },
   ehealthexchange: {
     hostname: "https://concept01.ehealthexchange.org:52780/fhirproxy/r4/",
@@ -102,7 +103,6 @@ async function patient_id_query(input: PatientIdQueryRequest) {
 
   // Check for errors
   if (response.status !== 200) {
-    console.log("response:", response);
     throw new Error(`Patient search failed. Status: ${response.status}`);
   }
 
@@ -116,7 +116,6 @@ async function patient_id_query(input: PatientIdQueryRequest) {
 }
 
 export async function use_case_query(input: UseCaseQueryRequest) {
-  console.log("input:", input);
   // Get patient ID and patient resource
   const patient_resource_query_response = await patient_id_query({
     fhir_server: input.fhir_server,
@@ -165,6 +164,19 @@ export async function use_case_query(input: UseCaseQueryRequest) {
       ...use_case_query_response["entry"],
       ...syphilis_query_response["entry"],
     ];
+  } else if (input.use_case === "cancer") {
+    // Query for cancer
+    const cancer_query_response = await cancer_query({
+      fhir_host: fhir_host,
+      init: init,
+      patient_id: patient_id,
+    });
+
+    // Collect results
+    use_case_query_response["entry"] = [
+      ...use_case_query_response["entry"],
+      ...cancer_query_response["entry"],
+    ];
   }
 
   return {
@@ -181,8 +193,7 @@ async function social_determinants_query(
   const response = await query_response.json();
 
   // Check for errors
-  if (response.status !== 200) {
-    console.log("response:", response);
+  if (query_response.status !== 200) {
     throw new Error(`Patient search failed. Status: ${response.status}`);
   }
 
@@ -208,20 +219,11 @@ async function newborn_screening_query(
     "2708-6",
     "8336-0",
   ];
-  const loincFilter: string = "code=" + loincs.join(",");
+  const loincFilter: string = loincs.join(",");
 
-  const query = `/Observation?subject=${input.patient_id}&code=${loincFilter}`;
+  const query = `Observation?subject=Patient/${input.patient_id}&code=${loincFilter}`;
   const query_response = await fetch(input.fhir_host + query, input.init);
   const response = await query_response.json();
-  // Check for errors
-  if (response.status !== 200) {
-    console.log("response:", response);
-    throw new Error(`Patient search failed. Status: ${response.status}`);
-  }
-
-  if (response.total === 0) {
-    throw new Error("No patient found.");
-  }
 
   return response;
 }
@@ -260,18 +262,7 @@ async function syphilis_query(
   );
   const encounter_response = await encounter_query_response.json();
 
-  // // Check for errors
-  // if (response.status !== 200) {
-  //   console.log("response:", response);
-  //   throw new Error(`Patient search failed. Status: ${response.status}`);
-  // }
-
-  // if (response.total === 0) {
-  //   throw new Error("No patient found.");
-  // }
-
   // Collect results
-  console.log("response:", response);
   response["entry"] = [
     ...response["entry"],
     ...diagnostic_response["entry"],
@@ -282,23 +273,58 @@ async function syphilis_query(
   return response;
 }
 
-// async function add_loinc_filter(input: Array<string>): Promise<string> {
-//   const loincFilter: string = "code=" + input.join(",");
+async function cancer_query(
+  input: PatientResourceRequest
+): Promise<PatientResourceQueryResponse> {
+  const snomed: Array<string> = ["92814006"];
+  const rxnorm: Array<string> = ["828265"]; // drug codes from NLM/NIH RxNorm
+  const cpt: Array<string> = ["15301000"]; // encounter codes from AMA CPT
+  const snomedFilter: string = snomed.join(",");
+  const rxnormFilter: string = rxnorm.join(",");
+  const cptFilter: string = cpt.join(",");
 
-//   return loincFilter;
-// }
+  const condition_query = `/Condition?subject=${input.patient_id}&code=${snomedFilter}`;
+  const condition_query_response = await fetch(
+    input.fhir_host + condition_query,
+    input.init
+  );
+  const response = await condition_query_response.json();
 
-// async function use_case_sub_query() {
-//   let
-//   // use input.use_case to determine if there are LOINCS
-//   // if there are LOINCS, join them together and query for the appropriate resources
-//   // Check for errors
-//   if (response.status !== 200) {
-//     console.log("response:", response);
-//     throw new Error(`Patient search failed. Status: ${response.status}`);
-//   }
+  const encounter_query = `/Encounter?subject=${input.patient_id}&type=${cptFilter}`;
+  const encounter_query_response = await fetch(
+    input.fhir_host + encounter_query,
+    input.init
+  );
+  const encounter_response = await encounter_query_response.json();
 
-//   if (response.total === 0) {
-//     throw new Error("No patient found.");
-//   }
-// }
+  const medication_query = `/MedicationRequest?subject=${input.patient_id}&code=${rxnormFilter}`;
+  const medication_query_response = await fetch(
+    input.fhir_host + medication_query,
+    input.init
+  );
+  const medication_response = await medication_query_response.json();
+
+  const medication_administrations: Array<string> =
+    medication_response.entry.map(
+      (medication: { resource: { id: string } }) => medication.resource.id
+    );
+  const medicationFilter: string = medication_administrations.join(",");
+
+  const medication_admin_query = `/MedicationAdministration?subject=${input.patient_id}&request=${medicationFilter}`;
+  const medication_admin_query_response = await fetch(
+    input.fhir_host + medication_admin_query,
+    input.init
+  );
+  const medication_admin_response =
+    await medication_admin_query_response.json();
+
+  // Collect results
+  response["entry"] = [
+    ...response["entry"],
+    ...encounter_response["entry"],
+    ...medication_response["entry"],
+    ...medication_admin_response["entry"],
+  ];
+
+  return response;
+}

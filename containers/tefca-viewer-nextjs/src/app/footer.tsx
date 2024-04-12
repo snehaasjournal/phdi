@@ -33,8 +33,8 @@ export default function FooterComponent() {
                 right-justified-text
               "
             >
-              <div className="mobile-lg:grid-col-auto right-justified-text">
-                <p className="text-base-lightest usa_footer-trademark right-justified-text">© 2024 CDC. All rights reserved.</p>
+              <div className="mobile-lg:grid-col-auto left-justified-text">
+                <p className="text-base-lightest usa_footer-trademark left-justified-text">© 2024 CDC. All rights reserved.</p>
               </div>
             </div>
           </div>

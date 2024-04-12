@@ -189,7 +189,7 @@ export async function use_case_query(input: UseCaseQueryRequest) {
 async function social_determinants_query(
   input: PatientResourceRequest
 ): Promise<PatientResourceQueryResponse> {
-  const query = `/Observation?subject=${input.patient_id}&category=social-history`;
+  const query = `/Observation?subject=Patient/${input.patient_id}&category=social-history`;
   const query_response = await fetch(input.fhir_host + query, input.init);
   const response = await query_response.json();
 
@@ -237,18 +237,18 @@ async function syphilis_query(
   const loincFilter: string = loincs.join(",");
   const snomedFilter: string = snomed.join(",");
 
-  const query = `/Observation?subject=${input.patient_id}&code=${loincFilter}`;
+  const query = `/Observation?subject=Patient/${input.patient_id}&code=${loincFilter}`;
   const query_response = await fetch(input.fhir_host + query, input.init);
   const response = await query_response.json();
 
-  const diagnositic_report_query = `/DiagnosticReport?subject=${input.patient_id}&code=${loincFilter}`;
+  const diagnositic_report_query = `/DiagnosticReport?subject=Patient/${input.patient_id}&code=${loincFilter}`;
   const diagnositic_report_query_response = await fetch(
     input.fhir_host + diagnositic_report_query,
     input.init
   );
   const diagnostic_response = await diagnositic_report_query_response.json();
 
-  const condition_query = `/Condition?subject=${input.patient_id}&code=${snomedFilter}`;
+  const condition_query = `/Condition?subject=Patient/${input.patient_id}&code=${snomedFilter}`;
   const condition_query_response = await fetch(
     input.fhir_host + condition_query,
     input.init
@@ -256,7 +256,7 @@ async function syphilis_query(
   const condition_response = await condition_query_response.json();
   const condition_id = condition_response.entry[0].resource.id;
 
-  const encounter_query = `/Encounter?subject=${input.patient_id}&reason-reference=${condition_id}`;
+  const encounter_query = `/Encounter?subject=Patient/${input.patient_id}&reason-reference=${condition_id}`;
   const encounter_query_response = await fetch(
     input.fhir_host + encounter_query,
     input.init
@@ -284,21 +284,21 @@ async function cancer_query(
   const rxnormFilter: string = rxnorm.join(",");
   const cptFilter: string = cpt.join(",");
 
-  const condition_query = `/Condition?subject=${input.patient_id}&code=${snomedFilter}`;
+  const condition_query = `/Condition?subject=Patient/${input.patient_id}&code=${snomedFilter}`;
   const condition_query_response = await fetch(
     input.fhir_host + condition_query,
     input.init
   );
   const response = await condition_query_response.json();
 
-  const encounter_query = `/Encounter?subject=${input.patient_id}&type=${cptFilter}`;
+  const encounter_query = `/Encounter?subject=Patient/${input.patient_id}&type=${cptFilter}`;
   const encounter_query_response = await fetch(
     input.fhir_host + encounter_query,
     input.init
   );
   const encounter_response = await encounter_query_response.json();
 
-  const medication_query = `/MedicationRequest?subject=${input.patient_id}&code=${rxnormFilter}`;
+  const medication_query = `/MedicationRequest?subject=Patient/${input.patient_id}&code=${rxnormFilter}`;
   const medication_query_response = await fetch(
     input.fhir_host + medication_query,
     input.init
@@ -311,7 +311,7 @@ async function cancer_query(
     );
   const medicationFilter: string = medication_administrations.join(",");
 
-  const medication_admin_query = `/MedicationAdministration?subject=${input.patient_id}&request=${medicationFilter}`;
+  const medication_admin_query = `/MedicationAdministration?subject=Patient/${input.patient_id}&request=${medicationFilter}`;
   const medication_admin_query_response = await fetch(
     input.fhir_host + medication_admin_query,
     input.init

@@ -40,3 +40,34 @@ export function PatientView({ useCaseQueryResponse }: PatientViewProps) {
         </div>
     </div>)
 }
+
+export function PatientViewRaw({ useCaseQueryResponse }: PatientViewProps) {
+  return (<div>
+      <div>
+          <div className="main-container">
+              <div className="content-wrapper">
+                  <div className="nav-wrapper">
+                      <nav className="sticky-nav">
+                          <SideNav />
+                      </nav>
+                  </div>
+                  <div className={"ecr-viewer-container"}>
+            <div className="ecr-content">
+              <h2 className="margin-bottom-3" id="ecr-summary">
+                Patient Record
+              </h2>
+              <pre>{JSON.stringify(useCaseQueryResponse, null, 2)}</pre>
+              {/* <div className="margin-top-6">
+                <AccordionContainer
+                  fhirPathMappings={mappings}
+                  fhirBundle={useCaseQueryResponse.use_case_query_response}
+                />
+              </div> */}
+
+            </div>
+          </div>
+              </div>
+          </div>
+      </div>
+  </div>)
+}

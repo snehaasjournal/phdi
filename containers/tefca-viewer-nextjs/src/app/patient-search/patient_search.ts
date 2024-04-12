@@ -69,6 +69,11 @@ type PatientResourceQueryResponse = {
   entry: Record<string, unknown>[];
 } & Record<string, unknown>;
 
+type ParsedValues = {
+  message: string;
+  parsed_values: Record<string, unknown>;
+};
+
 // Expected responses from the FHIR server
 export type UseCaseQueryResponse = Awaited<ReturnType<typeof use_case_query>>;
 
@@ -180,11 +185,12 @@ export async function use_case_query(input: UseCaseQueryRequest) {
       ...cancer_query_response["entry"],
     ];
   }
-  const mp_response = await parse_message(use_case_query_response);
+  const mp_r = await parse_message(use_case_query_response);
+  // const parsed_values = mp_r.parsed_values;
 
   return {
     patient_id: patient_id,
-    use_case_query_response,
+    mp_r,
   };
 }
 
@@ -332,7 +338,9 @@ async function cancer_query(
   return response;
 }
 
-async function parse_message(input: PatientResourceQueryResponse) {
+async function parse_message(
+  input: PatientResourceQueryResponse
+): Promise<ParsedValues> {
   // Test Message Parser status
   // const response = await fetch("https://localhost:8080/");
   // console.log("response: ", await response.json());
@@ -356,7 +364,8 @@ async function parse_message(input: PatientResourceQueryResponse) {
   };
 
   const mp_response = await fetch(url, requestOptions);
-  console.log("mp_response: ", await mp_response.json());
+  const mp_r = await mp_response.json();
+  console.log("mp_response: ", mp_r);
 
-  return mp_response;
+  return mp_r;
 }

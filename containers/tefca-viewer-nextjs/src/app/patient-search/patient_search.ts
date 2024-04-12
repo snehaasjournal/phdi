@@ -1,8 +1,9 @@
 "use server";
-import { NextApiRequest, NextApiResponse } from "next";
+// import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
 import https from "https";
 import fetch, { RequestInit } from "node-fetch";
+import parsing_schema from "@/app/api/ecr_parsing_schema.json" assert { type: "json" };
 
 type FHIR_SERVERS = "meld" | "ehealthexchange";
 
@@ -179,6 +180,7 @@ export async function use_case_query(input: UseCaseQueryRequest) {
       ...cancer_query_response["entry"],
     ];
   }
+  const mp_response = await parse_message(use_case_query_response);
 
   return {
     patient_id: patient_id,
@@ -328,4 +330,33 @@ async function cancer_query(
   ];
 
   return response;
+}
+
+async function parse_message(input: PatientResourceQueryResponse) {
+  // Test Message Parser status
+  // const response = await fetch("https://localhost:8080/");
+  // console.log("response: ", await response.json());
+
+  const url = "http://localhost:8080/parse_message";
+  const message_format = `fhir`;
+  // console.log("input: ", input["entry"]);
+  const body = {
+    message_format: message_format,
+    parsing_schema: parsing_schema,
+    message: input,
+  };
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify(body),
+    body: JSON.stringify(body),
+  };
+
+  const mp_response = await fetch(url, requestOptions);
+  console.log("mp_response: ", await mp_response.json());
+
+  return mp_response;
 }

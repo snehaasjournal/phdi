@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:s3-latest
+    ports:
+      - "4566:4566"
+    volumes:
+      - "./init-s3.py:/etc/localstack/init/ready.d/init-s3.py" # ready hook
+
+  # Next.js app
+  ecr-viewer:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/app:/app
+    environment:
+      - SOURCE=s3
+      - AWS_REGION=us-east-1
+      - ECR_BUCKET_NAME=ecr-viewer-files
+      - AWS_ACCESS_KEY_ID=foo
+      - AWS_SECRET_ACCESS_KEY=bar
+      - S3_URL=http://localstack:4566
+    depends_on:
+      localstack:
+        condition: service_healthy

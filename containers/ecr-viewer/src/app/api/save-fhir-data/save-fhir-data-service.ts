@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
 import pgPromise from "pg-promise";
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandOutput,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { Bundle } from "fhir/r4";
-
-const s3Client = new S3Client({ region: process.env.AWS_REGION });
+import { s3Client } from "@/app/api/s3Client";
 
 /**
  * Saves a FHIR bundle to a postgres database.

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import pgPromise from "pg-promise";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { loadYamlConfig, streamToJson } from "../utils";
 import { database } from "@/app/api/fhir-data/db";
-
-const s3Client = new S3Client({ region: process.env.AWS_REGION });
+import { s3Client } from "@/app/api/s3Client";
 
 /**
  * Retrieves FHIR data from PostgreSQL database based on eCR ID.

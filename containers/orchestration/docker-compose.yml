@@ -50,6 +50,13 @@ services:
       - "${MESSAGE_PARSER_PORT_NUMBER}:8080"
     logging:
       driver: "json-file"
+  terminology-service:
+    build:
+      context: ../trigger-code-reference
+    ports:
+      - "${TERMINOLOGY_PORT_NUMBER}:8080"
+    logging:
+      driver: "json-file"
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: "jaeger"

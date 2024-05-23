@@ -36,6 +36,7 @@ SERVICE_URLS = {
     "ingestion": os.environ.get("INGESTION_URL"),
     "fhir_converter": os.environ.get("FHIR_CONVERTER_URL"),
     "message_parser": os.environ.get("MESSAGE_PARSER_URL"),
+    "terminology": os.environ.get("TERMINOLOGY_URL"),
     "save_bundle": os.environ.get("ECR_VIEWER_URL"),
 }
 
